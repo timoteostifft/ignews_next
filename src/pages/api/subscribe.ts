@@ -1,8 +1,9 @@
+/* eslint-disable import/no-anonymous-default-export */
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
 import { stripe } from "../../services/stripe";
 
-const subscribe = async (request: NextApiRequest, response: NextApiResponse) => {
+export default async (request: NextApiRequest, response: NextApiResponse) => {
   if(request.method === 'POST') {
 
     const session = await getSession({ req: request })
@@ -16,7 +17,7 @@ const subscribe = async (request: NextApiRequest, response: NextApiResponse) => 
       payment_method_types: ['card'],
       billing_address_collection: 'required',
       line_items: [
-        { price: 'price_1L5IytAXQT3jfDk8eb9JX5ij' }
+        { price: 'price_1L5IytAXQT3jfDk8eb9JX5ij', quantity: 1 }
       ],
       mode: 'subscription',
       allow_promotion_codes: true,
@@ -30,5 +31,3 @@ const subscribe = async (request: NextApiRequest, response: NextApiResponse) => 
     response.status(405).end('Method now allowed.')
   }
 }
-
-export { subscribe }
